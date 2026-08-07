@@ -1,0 +1,43 @@
+.container {
+  max-width: 40rem;
+  margin: 4rem auto;
+  padding: 0 1rem;
+  font-family: system-ui, sans-serif;
+  text-align: center;
+}
+
+blockquote {
+  font-size: 1.4rem;
+  line-height: 1.5;
+  margin: 2rem 0;
+  min-height: 4rem;
+  color: #333;
+}
+
+.status {
+  margin: 2rem 0;
+  min-height: 4rem;
+  color: #666;
+}
+
+.status--error {
+  color: #b00020;
+}
+
+button {
+  padding: 0.6rem 1.4rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background: white;
+}
+
+button:hover:not(:disabled) {
+  background: #f2f2f2;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
