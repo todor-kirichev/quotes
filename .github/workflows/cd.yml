@@ -1,0 +1,46 @@
+name: CD
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    if: github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Log in to ghcr
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set image tag
+        id: vars
+        run: echo "tag=${{ github.event.workflow_run.head_sha || github.sha }}" >> $GITHUB_OUTPUT
+
+      - name: Build and push backend
+        run: |
+          docker build -t ghcr.io/todor-kirichev/quotes-backend:${{ steps.vars.outputs.tag }} \
+                       -t ghcr.io/todor-kirichev/quotes-backend:latest ./backend
+          docker push --all-tags ghcr.io/todor-kirichev/quotes-backend
+
+      - name: Build and push frontend
+        run: |
+          docker build -t ghcr.io/todor-kirichev/quotes-frontend:${{ steps.vars.outputs.tag }} \
+                       -t ghcr.io/todor-kirichev/quotes-frontend:latest ./frontend
+          docker push --all-tags ghcr.io/todor-kirichev/quotes-frontend
+          
