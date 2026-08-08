@@ -21,7 +21,7 @@ spec:
             - until pg_isready -h postgres -U quotes -d quotes; do echo waiting for postgres; sleep 2; done
       containers:
         - name: backend
-          image: ghcr.io/todor-kirichev/quotes-backend:39b16736982bb27b29c48eb983d163b78630e027
+          image: ghcr.io/todor-kirichev/quotes-backend:7d4b746883cf2c58ed70f364dbcf334c8188587f
           ports:
             - containerPort: 8080
           env:
