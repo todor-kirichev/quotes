@@ -5,8 +5,6 @@ services:
 
   frontend:
     image: ghcr.io/todor-kirichev/quotes-frontend:latest
-    ports:
-      - "80:80"
     depends_on:
       - backend
     restart: unless-stopped
@@ -19,5 +17,5 @@ services:
     depends_on:
       - frontend
       - backend
-    restart: unless-stopped
+    restart: unless-stopped 
     
