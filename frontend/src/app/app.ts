@@ -1,5 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
+
 import { QuotesService } from './services/quotes';
+import { QuoteResponse } from './models/quote-response';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +11,7 @@ import { QuotesService } from './services/quotes';
 export class App {
   private readonly quotesService = inject(QuotesService);
 
-  protected readonly quote = signal('');
+  protected readonly quote = signal<QuoteResponse | null>(null);
   protected readonly loading = signal(false);
   protected readonly error = signal(false);
 
@@ -23,7 +25,7 @@ export class App {
 
     this.quotesService.getRandomQuote().subscribe({
       next: (response) => {
-        this.quote.set(response.quote);
+        this.quote.set(response);
         this.loading.set(false);
       },
       error: () => {

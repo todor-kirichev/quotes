@@ -1,28 +1,40 @@
 package com.todor.quotes.controller;
 
+import com.todor.quotes.dto.CreateQuoteRequest;
 import com.todor.quotes.dto.QuoteResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.todor.quotes.service.QuoteService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Random;
 
 @RestController
 @RequestMapping("/api/quotes")
 public class QuotesController {
 
-    private static final List<String> QUOTES = List.of(
-            "Простотата е предпоставка за надеждност.",
-            "Преждевременната оптимизация е коренът на всяко зло.",
-            "Кодът се чете далеч по-често, отколкото се пише.",
-            "Най-добрият код е кодът, който не си написал."
-    );
+    private final QuoteService service;
 
-    private final Random random = new Random();
+    public QuotesController(QuoteService service) {
+        this.service = service;
+    }
 
     @GetMapping("/random")
-    public QuoteResponse getRandomQuote() {
-        return new QuoteResponse(QUOTES.get(random.nextInt(QUOTES.size())));
+    public ResponseEntity<QuoteResponse> getRandomQuote() {
+        return service.getRandom()
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.noContent().build());
+    }
+
+    @GetMapping
+    public List<QuoteResponse> getAllQuotes() {
+        return service.getAll();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public QuoteResponse createQuote(@Valid @RequestBody CreateQuoteRequest request) {
+        return service.create(request);
     }
 }

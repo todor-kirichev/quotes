@@ -1,3 +1,5 @@
 export interface QuoteResponse {
-  quote: string;
+  id: number;
+  text: string;
+  author: string | null;
 }

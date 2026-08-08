@@ -1,12 +1,15 @@
 <main class="container">
-  <h1>Цитат на деня 2</h1>
+  <h1>Цитат на деня</h1>
 
   @if (loading()) {
     <p class="status">Зареждане...</p>
   } @else if (error()) {
     <p class="status status--error">Грешка при зареждане на цитат.</p>
-  } @else {
-    <blockquote>{{ quote() }}</blockquote>
+  } @else if (quote(); as q) {
+    <blockquote>{{ q.text }}</blockquote>
+    @if (q.author) {
+      <p class="author">— {{ q.author }}</p>
+    }
   }
 
   <button type="button" (click)="loadQuote()" [disabled]="loading()">
