@@ -7,6 +7,22 @@ on:
 jobs:
   backend:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: quotes
+          POSTGRES_USER: quotes
+          POSTGRES_PASSWORD: testpassword
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+        ports:
+          - 5432:5432
+
     steps:
       - uses: actions/checkout@v4
 
@@ -19,6 +35,12 @@ jobs:
       - name: Run tests
         run: ./mvnw test -B
         working-directory: ./backend
+        env:
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_NAME: quotes
+          DB_USER: quotes
+          DB_PASSWORD: testpassword
 
   frontend:
     runs-on: ubuntu-latest
