@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: ghcr.io/todor-kirichev/quotes-frontend:7d4b746883cf2c58ed70f364dbcf334c8188587f
+          image: ghcr.io/todor-kirichev/quotes-frontend:4d0925c39db623a1fcc08777f9da638e573491b8
           ports:
             - containerPort: 80
           resources:
